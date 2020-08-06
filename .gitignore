@@ -1,0 +1,7 @@
+.*.swp
+*.test
+.DS_Store
+tmp
+test.xlsx
+!.gitkeep
+.idea/
