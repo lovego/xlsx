@@ -1,4 +1,4 @@
-module github.com/lovego/excels
+module github.com/lovego/xlsx
 
 go 1.14
 
