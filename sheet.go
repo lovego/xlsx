@@ -2,7 +2,9 @@ package xlsx
 
 import (
 	"reflect"
+	"strings"
 
+	"github.com/lovego/errs"
 	"github.com/lovego/strs"
 	"github.com/tealeg/xlsx"
 )
@@ -50,17 +52,21 @@ func (s *Sheet) generateBody(sheet *xlsx.Sheet) error {
 		return nil
 	}
 
-	var fieldNames []string
+	var fieldNames = make([][]string, len(s.Columns))
 	for i := range s.Columns {
-		fieldNames = append(fieldNames, strs.FirstLetterToUpper(s.Columns[i].Prop))
+		names := strings.SplitN(s.Columns[i].Prop, ".", -1)
+		for i := range names {
+			names[i] = strs.FirstLetterToUpper(names[i])
+		}
+		fieldNames[i] = names
 	}
 
 	for i := 0; i < data.Len(); i++ {
 		rowData := data.Index(i)
 		row := sheet.AddRow()
-		for _, fieldName := range fieldNames {
-			if v, err := getValue(rowData, fieldName); err != nil {
-				return err
+		for i, fieldName := range fieldNames {
+			if v, ok := GetValue(rowData, fieldName); !ok {
+				return errs.New(`xlsx-err`, `xlsx: no such field: `+s.Columns[i].Prop)
 			} else {
 				row.AddCell().SetValue(v)
 			}

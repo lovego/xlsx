@@ -2,20 +2,40 @@ package xlsx
 
 import (
 	"reflect"
-	"strings"
 	"time"
-
-	"github.com/lovego/errs"
 )
 
-func getValue(value reflect.Value, fieldName string) (interface{}, error) {
-	names := strings.SplitN(fieldName, ".", -1)
+func GetValue(value reflect.Value, names []string) (interface{}, bool) {
 	for _, name := range names {
-		if value = value.FieldByName(name); !value.IsValid() {
-			return nil, errs.New(`xlsx-err`, `xlsx: no such field: `+fieldName)
+		if v := tryField(value, name); v.IsValid() {
+			value = v
+		} else if v := tryMethod(value, name); v.IsValid() {
+			value = v
+		} else if value.Kind() != reflect.Ptr && value.CanAddr() {
+			if v := tryMethod(value.Addr(), name); v.IsValid() {
+				value = v
+			} else {
+				return nil, false
+			}
+		} else {
+			return nil, false
 		}
 	}
-	return format(value), nil
+	return format(value), true
+}
+
+func tryField(value reflect.Value, name string) reflect.Value {
+	if value.Kind() == reflect.Ptr {
+		value = value.Elem()
+	}
+	return value.FieldByName(name)
+}
+
+func tryMethod(value reflect.Value, name string) reflect.Value {
+	if v := value.MethodByName(name); v.IsValid() && v.Type().NumOut() == 1 {
+		return v.Call(nil)[0]
+	}
+	return reflect.Value{}
 }
 
 func format(value reflect.Value) interface{} {
