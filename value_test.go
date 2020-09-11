@@ -9,8 +9,7 @@ import (
 )
 
 func ExampleNonPtrType_GetValue() {
-	day, _ := date.New("2020-08-07")
-	ts := TestStruct{String: "中国", Layer: TestStruct2{Date: *day}}
+	ts := TestStruct{String: "中国", Layer: TestStruct2{Date: date.New(2020, 8, 07)}}
 	v := reflect.ValueOf(ts)
 	fmt.Println(xlsx.GetValue(v, []string{"String"}))
 	fmt.Println(xlsx.GetValue(v, []string{"Layer", "Date"}))
@@ -29,8 +28,7 @@ func ExampleNonPtrType_GetValue() {
 }
 
 func ExamplePtrType_GetValue() {
-	day, _ := date.New("2020-08-07")
-	ts := TestStruct{String: "中国", Layer: TestStruct2{Date: *day}}
+	ts := TestStruct{String: "中国", Layer: TestStruct2{Date: date.New(2020, 8, 7)}}
 	v := reflect.ValueOf(&ts)
 	fmt.Println(xlsx.GetValue(v, []string{"String"}))
 	fmt.Println(xlsx.GetValue(v, []string{"Layer", "Date"}))

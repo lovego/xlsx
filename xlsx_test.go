@@ -32,7 +32,7 @@ func ExampleFile_WriteFile() {
 	data := []TestStruct{
 		{
 			String: "中国", Bool: true,
-			Layer:   TestStruct2{Time: time.Now(), Date: date.Date{time.Now()}},
+			Layer:   TestStruct2{Time: time.Now(), Date: date.Today()},
 			Decimal: decimal.New(12399, -2),
 		},
 		{
