@@ -7,7 +7,7 @@ import (
 	"github.com/lovego/errs"
 	"github.com/lovego/strs"
 	"github.com/shopspring/decimal"
-	"github.com/tealeg/xlsx/v3"
+	"github.com/tealeg/xlsx"
 )
 
 type Sheet struct {
@@ -70,11 +70,11 @@ func (s *Sheet) generateBody(sheet *xlsx.Sheet) error {
 				return errs.New(`xlsx-err`, `xlsx: no such field: `+s.Columns[i].Prop)
 			} else {
 				cell := row.AddCell()
+				cell.SetValue(v)
 
-				if dec, ok := v.(decimal.Decimal); ok {
-					cell.SetNumeric(dec.String())
-				} else {
-					cell.SetValue(v)
+				if _, ok := v.(decimal.Decimal); ok {
+					cell.NumFmt = "general"
+					cell.SetFormula("")
 				}
 			}
 		}

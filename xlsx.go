@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/tealeg/xlsx/v3"
+	"github.com/tealeg/xlsx"
 )
 
 func WriteHttp(rw http.ResponseWriter, name string, sheets ...Sheet) error {
