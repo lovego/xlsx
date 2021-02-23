@@ -6,7 +6,8 @@ import (
 
 	"github.com/lovego/errs"
 	"github.com/lovego/strs"
-	"github.com/tealeg/xlsx"
+	"github.com/shopspring/decimal"
+	"github.com/tealeg/xlsx/v3"
 )
 
 type Sheet struct {
@@ -68,7 +69,13 @@ func (s *Sheet) generateBody(sheet *xlsx.Sheet) error {
 			if v, ok := GetValue(rowData, fieldName); !ok {
 				return errs.New(`xlsx-err`, `xlsx: no such field: `+s.Columns[i].Prop)
 			} else {
-				row.AddCell().SetValue(v)
+				cell := row.AddCell()
+
+				if dec, ok := v.(decimal.Decimal); ok {
+					cell.SetNumeric(dec.String())
+				} else {
+					cell.SetValue(v)
+				}
 			}
 		}
 	}
