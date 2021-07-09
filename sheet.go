@@ -2,10 +2,8 @@ package xlsx
 
 import (
 	"reflect"
-	"strings"
 
 	"github.com/lovego/errs"
-	"github.com/lovego/strs"
 	"github.com/shopspring/decimal"
 	"github.com/tealeg/xlsx"
 )
@@ -14,12 +12,6 @@ type Sheet struct {
 	Name    string
 	Data    interface{}
 	Columns []Column
-}
-
-type Column struct {
-	Label string  `json:"label" c:"显示名"`
-	Prop  string  `json:"prop"  c:"数据字段名"`
-	Width float64 `json:"width" c:"宽度"`
 }
 
 func (s *Sheet) Generate(file *xlsx.File) error {
@@ -53,21 +45,12 @@ func (s *Sheet) generateBody(sheet *xlsx.Sheet) error {
 		return nil
 	}
 
-	var fieldNames = make([][]string, len(s.Columns))
-	for i := range s.Columns {
-		names := strings.SplitN(s.Columns[i].Prop, ".", -1)
-		for i := range names {
-			names[i] = strs.FirstLetterToUpper(names[i])
-		}
-		fieldNames[i] = names
-	}
-
 	for i := 0; i < data.Len(); i++ {
 		rowData := data.Index(i)
 		row := sheet.AddRow()
-		for i, fieldName := range fieldNames {
-			if v, ok := GetValue(rowData, fieldName); !ok {
-				return errs.New(`xlsx-err`, `xlsx: no such field: `+s.Columns[i].Prop)
+		for j := range s.Columns {
+			if v, ok := s.Columns[j].GetValue(rowData); !ok {
+				return errs.New(`xlsx-err`, `xlsx: no such field: `+s.Columns[j].Prop)
 			} else {
 				cell := row.AddCell()
 				cell.SetValue(v)

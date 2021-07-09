@@ -49,7 +49,13 @@ func ExampleFile_WriteFile() {
 		{Label: "十进制数", Prop: "decimal", Width: 10},
 		{Label: "方法", Prop: "method", Width: 10},
 		{Label: "指针方法", Prop: "ptrMethod", Width: 15},
+		{Label: "Getter", Prop: "xxx", Width: 15},
 	}
+	xlsx.SetGetters(columns, map[string]func(interface{}) interface{}{
+		"xxx": func(row interface{}) interface{} {
+			return row.(TestStruct).String
+		},
+	})
 
 	fmt.Println(xlsx.WriteFile("test", xlsx.Sheet{
 		Name:    "工作簿1",

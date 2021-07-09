@@ -1,7 +1,11 @@
 # xlsx
 wrapper for simple xlsx generation
 
-[![Build Status](https://travis-ci.org/lovego/xlsx.svg?branch=master)](https://travis-ci.org/lovego/xlsx)
-[![Coverage Status](https://img.shields.io/coveralls/github/lovego/xlsx/master.svg)](https://coveralls.io/github/lovego/xlsx?branch=master)
+[![Build Status](https://github.com/lovego/xlsx/actions/workflows/go.yml/badge.svg)](https://github.com/lovego/xlsx/actions/workflows/go.yml)
+[![Coverage Status](https://coveralls.io/repos/github/lovego/xlsx/badge.svg?branch=master)](https://coveralls.io/github/lovego/xlsx)
 [![Go Report Card](https://goreportcard.com/badge/github.com/lovego/xlsx)](https://goreportcard.com/report/github.com/lovego/xlsx)
-[![GoDoc](https://godoc.org/github.com/lovego/xlsx?status.svg)](https://godoc.org/github.com/lovego/xlsx)
+[![Documentation](https://pkg.go.dev/badge/github.com/lovego/xlsx)](https://pkg.go.dev/github.com/lovego/xlsx@v0.0.3)
+
+## Install
+`$ go get github.com/lovego/xlsx`
+
