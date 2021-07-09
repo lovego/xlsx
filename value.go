@@ -44,6 +44,7 @@ func format(value reflect.Value) interface{} {
 		if value.IsNil() {
 			return ``
 		}
+		value = value.Elem()
 	}
 	ifc := value.Interface()
 
@@ -56,9 +57,8 @@ func format(value reflect.Value) interface{} {
 		}
 	case time.Time:
 		return formatTime(v)
-	case *time.Time:
-		return formatTime(*v)
 	}
+
 	return ifc
 }
 

@@ -14,6 +14,7 @@ type TestStruct struct {
 	Bool    bool
 	Layer   TestStruct2
 	Decimal decimal.Decimal
+	Pointer *string
 }
 type TestStruct2 struct {
 	Time time.Time
@@ -29,16 +30,19 @@ func (t *TestStruct) PtrMethod() string {
 }
 
 func ExampleFile_WriteFile() {
+	var s = "值"
 	data := []TestStruct{
 		{
 			String: "中国", Bool: true,
 			Layer:   TestStruct2{Time: time.Now(), Date: date.Today()},
 			Decimal: decimal.New(12399, -2),
+			Pointer: &s,
 		},
 		{
 			String: "世界", Bool: false,
 			Layer:   TestStruct2{Time: time.Time{}, Date: date.Date{}},
 			Decimal: decimal.New(123, 0),
+			Pointer: &s,
 		},
 	}
 	columns := []xlsx.Column{
@@ -49,6 +53,7 @@ func ExampleFile_WriteFile() {
 		{Label: "十进制数", Prop: "decimal", Width: 10},
 		{Label: "方法", Prop: "method", Width: 10},
 		{Label: "指针方法", Prop: "ptrMethod", Width: 15},
+		{Label: "指针值", Prop: "pointer", Width: 15},
 		{Label: "Getter", Prop: "xxx", Width: 15},
 	}
 	xlsx.SetGetters(columns, map[string]func(interface{}) interface{}{
