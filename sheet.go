@@ -32,7 +32,7 @@ func (s *Sheet) generateHeader(sheet *xlsx.Sheet) {
 		cell := row.AddCell()
 		cell.SetStyle(defaultHeaderStyle)
 		cell.SetString(s.Columns[i].Label)
-		sheet.SetColWidth(i, i+1, s.Columns[i].Width)
+		sheet.SetColWidth(i, i, s.Columns[i].Width)
 	}
 }
 
