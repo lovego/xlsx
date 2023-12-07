@@ -46,6 +46,10 @@ func Write(w io.Writer, sheets ...Sheet) error {
 func Generate(sheets ...Sheet) (*xlsx.File, error) {
 	file := xlsx.NewFile()
 	for i := range sheets {
+		// no generate sheet when no columns or no data
+		if len(sheets[i].Columns) == 0 && sheets[i].Data == nil {
+			continue
+		}
 		if err := sheets[i].Generate(file); err != nil {
 			return nil, err
 		}
