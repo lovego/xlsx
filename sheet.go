@@ -19,14 +19,14 @@ func (s *Sheet) Generate(file *xlsx.File) error {
 	if err != nil {
 		return err
 	}
-	s.generateHeader(sheet)
-	if err := s.generateBody(sheet); err != nil {
+	s.GenerateHeader(sheet)
+	if err := s.GenerateBody(sheet); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (s *Sheet) generateHeader(sheet *xlsx.Sheet) {
+func (s *Sheet) GenerateHeader(sheet *xlsx.Sheet) {
 	row := sheet.AddRow()
 	for i := range s.Columns {
 		cell := row.AddCell()
@@ -36,7 +36,7 @@ func (s *Sheet) generateHeader(sheet *xlsx.Sheet) {
 	}
 }
 
-func (s *Sheet) generateBody(sheet *xlsx.Sheet) error {
+func (s *Sheet) GenerateBody(sheet *xlsx.Sheet) error {
 	data := reflect.ValueOf(s.Data)
 	if data.Kind() == reflect.Ptr {
 		data = data.Elem()
